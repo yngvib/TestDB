@@ -1,5 +1,6 @@
 package com.example.TestDB;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -38,11 +39,27 @@ public class StudentsAdapter {
     }
 
     public long insertStudent( int sid, String name, boolean cool ) {
-        return 0;
+        String[] cols = DBHelper.TableStudentsCols;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put( cols[1], ((Integer)sid).toString() );
+        contentValues.put( cols[2], name );
+        contentValues.put( cols[3], cool ? "1" : "0" );
+        openToWrite();
+        long value = db.insert(DBHelper.TableStudents, null, contentValues );
+        close();
+        return value;
     }
 
     public long updateStudent( int sid, String name, boolean cool ) {
-        return 0;
+        String[] cols = DBHelper.TableStudentsCols;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put( cols[1], ((Integer)sid).toString() );
+        contentValues.put( cols[2], name );
+        contentValues.put( cols[3], cool ? "1" : "0" );
+        openToWrite();
+        long value = db.update(DBHelper.TableStudents, contentValues, cols[1] + "=" + sid, null );
+        close();
+        return value;
     }
 
     public Cursor queryStudents() {
@@ -53,6 +70,10 @@ public class StudentsAdapter {
     }
 
     public Cursor queryStudent( int sid ) {
-        return null;
+        openToRead();
+        String[] cols = DBHelper.TableStudentsCols;
+        Cursor cursor = db.query( DBHelper.TableStudents,
+                                  cols, cols[1] + "=" + sid , null, null, null, null );
+        return cursor;
     }
 }

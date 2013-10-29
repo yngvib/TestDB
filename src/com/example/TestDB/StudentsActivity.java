@@ -1,7 +1,5 @@
 package com.example.TestDB;
 
-import android.*;
-import android.R;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.database.Cursor;
@@ -24,10 +22,12 @@ public class StudentsActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         Cursor cursor = mStudentsAdapter.queryStudents();
-        String from[] = { "name" };
-        int to[] = { R.id.text1 };
+        String[] cols = DBHelper.TableStudentsCols;
+        String from[] = { cols[1], cols[2] };
+        int to[] = { R.id.s_sid, R.id.s_name };
         startManagingCursor( cursor );
-        mCursorAdapter = new SimpleCursorAdapter(this, R.layout.simple_list_item_1, cursor, from, to );
+        mCursorAdapter = new SimpleCursorAdapter(this, R.layout.row, cursor, from, to );
+
         setListAdapter( mCursorAdapter );
     }
 
