@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "STUDENTS_DB";
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 6;
 
     public static final String TableStudents = "students";
     public static final String[] TableStudentsCols = { "_id", "sid", "name", "cool" };
