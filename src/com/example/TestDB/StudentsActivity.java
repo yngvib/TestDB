@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 /**
@@ -23,12 +26,26 @@ public class StudentsActivity extends ListActivity {
 
         Cursor cursor = mStudentsAdapter.queryStudents();
         String[] cols = DBHelper.TableStudentsCols;
-        String from[] = { cols[1], cols[2] };
-        int to[] = { R.id.s_sid, R.id.s_name };
+        String from[] = { cols[1], cols[2], cols[3] };
+        int to[] = { R.id.s_sid, R.id.s_name, R.id.s_cool };
         startManagingCursor( cursor );
+
         mCursorAdapter = new SimpleCursorAdapter(this, R.layout.row, cursor, from, to );
 
-        setListAdapter( mCursorAdapter );
+        mCursorAdapter.setViewBinder( new SimpleCursorAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Cursor cursor, int i) {
+                if ( i==3 ) {
+                    ((ImageView) view).setImageResource(
+                            (cursor.getInt(i) == 0) ? R.drawable.emo_im_sad : R.drawable.emo_im_cool );
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+        setListAdapter(mCursorAdapter);
     }
 
     protected void onRestart() {
@@ -39,6 +56,10 @@ public class StudentsActivity extends ListActivity {
     protected void onDestroy() {
         super.onDestroy();
         mStudentsAdapter.close();
+    }
+
+    protected void onListItemClick( ListView l, View v, int position, long id  ) {
+        // ...
     }
 
 }
